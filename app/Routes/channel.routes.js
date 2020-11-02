@@ -1,7 +1,7 @@
 module.exports = app => {
     const channels = require("../Controllers/channel.controller.js")
 
-    app.get('/', channels.findAll)
+    app.get('/channels/', channels.findAll)
 
-    app.post('/', channels.create)
+    app.post('/channels/', channels.create)
 }
