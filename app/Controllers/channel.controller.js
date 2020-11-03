@@ -1,7 +1,8 @@
 const db = require('../connection')
 
 const channels = db.channels
-const Op = db.Sequelize.Op
+const Op = require('sequelize').Op
+
 exports.create = (req, res) => {
     if (!req.body.name) {
         res.status(400).send({
@@ -9,16 +10,6 @@ exports.create = (req, res) => {
         })
         return;
     }
-
-    // let description = ""
-    // if (req.body.description.trim()) {
-    //     description = req.body.description.trim()
-    // }
-
-    // const channel = {
-    //     name: req.body.name,
-    //     description: description
-    // }
 
     channels.create({ name: req.body.name, description: req.body.description.trim() })
         .then(data => {
@@ -41,4 +32,15 @@ exports.findAll = (req, res) => {
                 message: err.message || "Some error occurred while fetching channels"
             })
         })
+}
+
+exports.findOne = async(req, res) => {
+    const channel = req.params.channelName
+    var condition = channel ? {
+        name: {
+            [Op.like]: `%${channel}%`
+        }
+    } : null
+    let selectedChannel = await channels.findAll({ attributes: ['id', 'name', 'description'], where: condition })
+    res.send(selectedChannel)
 }

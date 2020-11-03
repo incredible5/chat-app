@@ -14,7 +14,6 @@ db.Sequelize = sequelize
 db.sequelize = sequelize
 
 db.users = require('./Models/Users.js')(sequelize, Sequelize)
-db.participants = require('./Models/Participants.js')(sequelize, Sequelize)
 db.channels = require('./Models/Channels.js')(sequelize, Sequelize)
 db.messages = require('./Models/Messages.js')(sequelize, Sequelize)
 
@@ -38,16 +37,8 @@ db.messages.belongsTo(db.channels, {
     as: "channel"
 })
 
-db.users.belongsToMany(db.channels, {
-    through: "participants",
-    as: "channels",
-    foreignKey: "user_id",
-});
+db.users.belongsToMany(db.channels, { through: "participants" });
 
-db.channels.belongsToMany(db.users, {
-    through: "participants",
-    as: "users",
-    foreignKey: "channel_id",
-});
+db.channels.belongsToMany(db.users, { through: "participants" });
 
 module.exports = db
