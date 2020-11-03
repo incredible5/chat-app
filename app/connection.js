@@ -16,6 +16,7 @@ db.sequelize = sequelize
 db.users = require('./Models/Users.js')(sequelize, Sequelize)
 db.channels = require('./Models/Channels.js')(sequelize, Sequelize)
 db.messages = require('./Models/Messages.js')(sequelize, Sequelize)
+    // db.participants = require('./Models/Participants')(sequelize, Sequelize)
 
 sequelize.authenticate()
     .then(() => {
@@ -37,8 +38,8 @@ db.messages.belongsTo(db.channels, {
     as: "channel"
 })
 
-db.users.belongsToMany(db.channels, { through: "participants" });
+db.users.belongsToMany(db.channels, { through: "Participants" });
 
-db.channels.belongsToMany(db.users, { through: "participants" });
+db.channels.belongsToMany(db.users, { through: "Participants" });
 
 module.exports = db

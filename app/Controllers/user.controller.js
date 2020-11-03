@@ -2,7 +2,7 @@ const db = require('../connection')
 
 const users = db.users
 const channels = db.channels
-const paticipants = db.participants
+    // const paticipants = db.participants
 const Op = db.Sequelize.Op
 
 exports.create = async(req, res) => {
@@ -13,9 +13,11 @@ exports.create = async(req, res) => {
         return;
     }
     try {
+        console.clear()
         const user = await users.create({ name: req.body.name, email: req.body.email, password: req.body.password })
-        const welcomeChannel = await channels.findOne({ attributes: ['id'], where: { name: 'Welcome' } })
+        const welcomeChannel = await channels.findOne({ where: { name: 'Welcome' } })
         user.addChannels(welcomeChannel)
+        console.log(welcomeChannel.toJSON())
         res.send(user)
     } catch (err) {
         res.status(500).send({
@@ -31,7 +33,7 @@ exports.findUsersWithinChannel = async(req, res) => {
     try {
         const user = await users.findByPk(userID)
         const channel = await channels.findOne({ attributes: ['id'], where: { name: channelName } })
-        user.addChannels(channel)
+        await user.addChannels(channel)
 
         const availableChannels = await channels.findAll({
             include: [users],
