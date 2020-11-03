@@ -14,7 +14,7 @@ exports.create = async(req, res) => {
     }
     try {
         const user = await users.create({ name: req.body.name, email: req.body.email, password: req.body.password })
-        const welcomeChannel = await channels.findAll({ attributes: ['id'], where: { name: 'Welcome' } })
+        const welcomeChannel = await channels.findOne({ attributes: ['id'], where: { name: 'Welcome' } })
         user.addChannels(welcomeChannel)
         res.send(user)
     } catch (err) {
@@ -25,17 +25,23 @@ exports.create = async(req, res) => {
     }
 }
 exports.findUsersWithinChannel = async(req, res) => {
-    const channel = req.query.channelName
-    console.log(channel)
-    let welcomeChannelID = await channels.findAll({ attributes: ['id'], where: { name: channel } })
-    welcomeChannelID = welcomeChannelID[0].dataValues.id
-    users.findByPk({ where: condition })
-        .then(data => {
-            res.send(data)
+    const channelName = req.query.channelName
+    const userID = req.query.userID
+
+    try {
+        const user = await users.findByPk(userID)
+        const channel = await channels.findOne({ attributes: ['id'], where: { name: channelName } })
+        user.addChannels(channel)
+
+        const availableChannels = await channels.findAll({
+            include: [users],
+            where: { name: channelName }
         })
-        .catch(err => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while fetching users"
-            })
+        res.send(availableChannels)
+    } catch (err) {
+        res.status(500).send({
+            message: err.message || "Some error occurred while creating user"
+
         })
+    }
 }

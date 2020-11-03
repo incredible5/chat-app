@@ -21,7 +21,11 @@ const force = false
 db.sequelize.sync({ force })
     .then(() => {
         console.log("Successfully created tables")
-        if (force) db.channels.create({ name: "Welcome", description: "Welcome channel for new users" })
+        if (force) {
+            db.channels.create({ name: "Welcome", description: "Welcome channel for new users" })
+            db.channels.create({ name: "Test Channel 1", description: "Test channel 1 for users" })
+            db.channels.create({ name: "Test Channel 2", description: "Test channel 2 for users" })
+        }
     })
     .catch(err => {
         console.log(err.message)
