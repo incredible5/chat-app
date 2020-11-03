@@ -13,11 +13,9 @@ exports.create = async(req, res) => {
         return;
     }
     try {
-        console.clear()
         const user = await users.create({ name: req.body.name, email: req.body.email, password: req.body.password })
         const welcomeChannel = await channels.findOne({ where: { name: 'Welcome' } })
         user.addChannels(welcomeChannel)
-        console.log(welcomeChannel.toJSON())
         res.send(user)
     } catch (err) {
         res.status(500).send({

@@ -33,6 +33,7 @@ db.sequelize.sync({ force })
 
 require("./app/Routes/user.routes.js")(app)
 require("./app/Routes/channel.routes.js")(app)
+require("./app/Routes/message.routes.js")(app)
 
 const PORT = process.env.serverPort || 8000
 

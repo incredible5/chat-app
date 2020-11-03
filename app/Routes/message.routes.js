@@ -1,7 +1,7 @@
 module.exports = app => {
-    const messages = require("../Controllers/channel.controller.js")
+    const messages = require("../Controllers/message.controller.js")
 
-    app.get("/message/", messages.findAll)
+    app.get("/messages/", messages.findMessagesWithinChannel)
 
-    app.post("/message/", messages.create)
+    app.post("/messages/:name", messages.create)
 }
