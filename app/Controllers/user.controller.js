@@ -29,25 +29,3 @@ exports.getUser = async(req, res) => {
     const user = await Users.findByPk(userID)
     res.send(user)
 }
-
-exports.findUsersWithinChannel = async(req, res) => {
-    const channelName = req.query.channelName
-    const userID = req.query.userID
-
-    try {
-        const user = await Users.findByPk(userID)
-        const channel = await Channels.findOne({ attributes: ['id'], where: { name: channelName } })
-        await user.addChannels(channel)
-
-        const availableChannels = await Channels.findAll({
-            include: [Users],
-            where: { name: channelName }
-        })
-        res.send(availableChannels)
-    } catch (err) {
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating user"
-
-        })
-    }
-}
