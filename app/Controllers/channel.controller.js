@@ -1,6 +1,7 @@
 const db = require('../connection')
 
-const channels = db.channels
+const Channels = db.channels
+const Users = db.users
 const Op = require('sequelize').Op
 
 exports.create = (req, res) => {
@@ -11,7 +12,7 @@ exports.create = (req, res) => {
         return;
     }
 
-    channels.create({ name: req.body.name, description: req.body.description.trim() })
+    Channels.create({ name: req.body.name, description: req.body.description.trim() })
         .then(data => {
             res.send(data)
         })
@@ -23,7 +24,7 @@ exports.create = (req, res) => {
 }
 
 exports.findAll = (req, res) => {
-    channels.findAll()
+    Channels.findAll()
         .then(data => {
             res.send(data)
         })
@@ -36,10 +37,27 @@ exports.findAll = (req, res) => {
 
 exports.findOne = async(req, res) => {
     const channelID = req.params.channelID
-    let selectedChannel = await channels.findByPk(channelID)
+    let selectedChannel = await Channels.findByPk(channelID)
     res.send(selectedChannel)
 }
 
 exports.findParticipants = async(req, res) => {
-    res.send("ok")
+    const channelID = req.params.channelID
+    const userID = req.params.userID
+    try {
+        const user = await Users.findByPk(userID)
+        const channel = await Channels.findByPk(channelID)
+        await user.addChannels(channel)
+
+        const availableChannels = await Channels.findAll({
+            include: [Users],
+            where: { id: channelID }
+        })
+        res.send(availableChannels)
+    } catch (err) {
+        res.status(500).send({
+            message: err.message || "Some error occurred while creating user"
+
+        })
+    }
 }
