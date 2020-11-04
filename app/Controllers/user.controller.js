@@ -16,18 +16,12 @@ exports.create = async(req, res) => {
     const { error } = await userSchema.validate({ name: req.body.name, email: req.body.email, password: req.body.password })
     if (error) {
         console.log(error)
-        res.status(500).send({
+        res.status(400).send({
             message: "Invalid data"
         })
         return;
     }
 
-    if (!req.body.name || !req.body.email || !req.body.password) {
-        res.status(400).send({
-            message: "Invalid tokens"
-        })
-        return;
-    }
     try {
         const user = await Users.create({ name: req.body.name, email: req.body.email, password: req.body.password })
         const welcomeChannel = await Channels.findOne({ where: { name: 'Welcome' } })
