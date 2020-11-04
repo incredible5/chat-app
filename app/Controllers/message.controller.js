@@ -17,7 +17,7 @@ exports.create = async(req, res) => {
     const { error } = await messageSchema.validate({ user_id: req.body.userID, channel_id: req.body.channelID, message: req.body.message })
     if (error) {
         res.status(500).send({
-            message: "Invalid token(s)" || "Some error occurred while delivering message"
+            message: "Invalid token(s)"
         })
         return;
     }
