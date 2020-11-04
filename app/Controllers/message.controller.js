@@ -16,7 +16,7 @@ exports.create = (req, res) => {
 }
 
 exports.findMessagesWithinChannel = async(req, res) => {
-    const channel = await Channels.findOne({ attributes: ['id'], where: { name: req.params.channelName } })
+    const channel = await Channels.findByPk(req.params.channelID)
     const channelID = channel.toJSON()
     let channelMessages = await Messages.findAll({ attributes: ['user_id', 'message'], where: { channel_id: channelID.id } })
     const userIDs = channelMessages.reduce((acc, curr) => {
