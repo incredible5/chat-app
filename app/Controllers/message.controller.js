@@ -1,3 +1,4 @@
+const { ref } = require('joi')
 const Joi = require('joi')
 
 const db = require('../connection')
@@ -7,7 +8,19 @@ const Channels = db.channels
 const Users = db.users
 const Op = require('sequelize').Op
 
-exports.create = (req, res) => {
+exports.create = async(req, res) => {
+    const messageSchema = Joi.object({
+        user_id: Joi.number().integer().positive(),
+        channel_id: Joi.number().integer().positive(),
+        message: Joi.string()
+    })
+    const { error } = await messageSchema.validate({ user_id: req.body.userID, channel_id: req.body.channelID, message: req.body.message })
+    if (error) {
+        res.status(500).send({
+            message: "Invalid token(s)" || "Some error occurred while delivering message"
+        })
+        return;
+    }
     Messages.create({ user_id: req.body.userID, channel_id: req.body.channelID, message: req.body.message })
         .then(message => res.send(message))
         .catch(err => {
