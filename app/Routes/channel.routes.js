@@ -5,5 +5,7 @@ module.exports = app => {
 
     app.get("/channels/:channelID", channels.findOne)
 
+    app.post("/channels/:channelID/participants", channels.findParticipants)
+
     app.post("/channels/", channels.create)
 }

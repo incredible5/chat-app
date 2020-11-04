@@ -39,3 +39,7 @@ exports.findOne = async(req, res) => {
     let selectedChannel = await channels.findByPk(channelID)
     res.send(selectedChannel)
 }
+
+exports.findParticipants = async(req, res) => {
+    res.send("ok")
+}
