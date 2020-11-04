@@ -3,7 +3,7 @@ module.exports = app => {
 
     app.get("/channels/", channels.findAll)
 
-    app.get("/channels/:channelName", channels.findOne)
+    app.get("/channels/:channelID", channels.findOne)
 
     app.post("/channels/", channels.create)
 }

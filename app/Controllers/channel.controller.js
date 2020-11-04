@@ -35,12 +35,7 @@ exports.findAll = (req, res) => {
 }
 
 exports.findOne = async(req, res) => {
-    const channel = req.params.channelName
-    var condition = channel ? {
-        name: {
-            [Op.like]: `%${channel}%`
-        }
-    } : null
-    let selectedChannel = await channels.findAll({ attributes: ['id', 'name', 'description'], where: condition })
+    const channelID = req.params.channelID
+    let selectedChannel = await channels.findByPk(channelID)
     res.send(selectedChannel)
 }
