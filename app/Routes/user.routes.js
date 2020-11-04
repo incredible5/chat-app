@@ -1,7 +1,7 @@
 module.exports = app => {
     const users = require("../Controllers/user.controller.js")
 
-    app.get('/user/', users.getUser)
+    app.get('/user/:userID', users.getUser)
 
     app.get('/users/', users.findUsersWithinChannel)
 

@@ -25,8 +25,8 @@ exports.create = async(req, res) => {
 }
 
 exports.getUser = async(req, res) => {
-    const name = req.query.userName
-    const user = await Users.findOne({ where: { name } })
+    const userID = req.params.userID
+    const user = await Users.findByPk(userID)
     res.send(user)
 }
 
