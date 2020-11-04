@@ -3,7 +3,5 @@ module.exports = app => {
 
     app.get('/user/:userID', users.getUser)
 
-    app.get('/users/', users.findUsersWithinChannel)
-
     app.post('/users/', users.create)
 }
