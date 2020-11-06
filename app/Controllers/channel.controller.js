@@ -88,7 +88,7 @@ exports.findParticipants = async(req, res) => {
             include: [Users],
             where: { id: channelID }
         })
-        res.send(availableChannels)
+        res.send(availableChannels[0])
     } catch (err) {
         res.status(500).send({
             message: err.message || "Some error occurred while creating user"
